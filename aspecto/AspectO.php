@@ -9,7 +9,6 @@
  * @author Basilio Brice&ntilde;o H. <bbh@tampico.org.mx>
  * @copyright Copyright &copy; 2006 Basilio Brice&ntilde;o Hern&aacute;ndez.
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version 0.1.7
  * @todo aspect->class/method weaving
  */
 class AspectO extends Overload {
@@ -46,6 +45,8 @@ class AspectO extends Overload {
         $aspects = $aspect;
       }
     }
+
+    var_dump( $aspects ); exit;
 
     return $aspects;
   }
