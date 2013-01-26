@@ -6,13 +6,12 @@
  * $weaver = new AspectOWeaver( ApectOConfig $config, Aspect $aspect );
  * </code>
  *
- * @author Basilio Brice&ntilde;o H. <bbh@tampico.org.mx>
+ * @author Basilio Brice&ntilde;o H. <bbh@briceno.mx>
  * @copyright Copyright &copy; 2007 Basilio Brice&ntilde;o Hern&aacute;ndez.
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version 0.1.35
  */
-class AspectOWeaver
-{
+class AspectOWeaver {
+
   public function __construct( AspectOConfig &$config, Aspect &$aspect )
   {
     foreach ( $aspect->getClasses() as $class_name => $times ) {
@@ -40,79 +39,119 @@ class AspectOWeaver
    * @param String $class
    * @return Array
    */
-  final private static function getAspectByClass ( Aspect $aspect, $class ) {
+  final private static function getAspectByClass ( Aspect $aspect, $class )
+  {
     $aspectByClass = new Aspect();
+
     $aspectByClass->name = $aspect->getName();
+
     // Intertypes
     if ( isset( $aspect->intertypes ) && $aspect->intertypes ) {
-      $aspectByClass->intertypes = new Intertype;
+
+      //$aspectByClass->intertypes = new Intertype;
+
       // Properties
-      if ( isset( $aspect->intertypes->properties ) && $aspect->intertypes->properties ) {
+      if ( isset( $aspect->intertypes->properties ) &&
+           $aspect->intertypes->properties ) {
+
         $aspectByClass->intertypes->properties = self::getObjectByClass( $aspect->intertypes->properties,
-                                         $class,
-                                         'properties' );
+                                                                         $class,
+                                                                         'properties' );
       }
+
       // Methods
       if ( isset( $aspect->intertypes->methods ) ) {
+
         $aspectByClass->intertypes->methods = self::getObjectByClass( $aspect->intertypes->methods,
-                                         $class,
-                                         'methods' );
+                                                                      $class,
+                                                                      'methods' );
       }
+
       // Inheritance
       if ( isset( $aspect->intertypes->inheritance ) ) {
+
         $aspectByClass->intertypes->inheritance = self::getObjectByClass( $aspect->intertypes->inheritance,
-                                          $class,
-                                          'inheritance' );
+                                                                          $class,
+                                                                          'inheritance' );
       }
-    } // Pointcuts
+    }
+
+    // Pointcuts
     if ( isset( $aspect->pointcuts ) ) {
+
       if ( is_array( $aspect->pointcuts ) ) {
+
         foreach ( $aspect->pointcuts as $pointcut ) {
+
           if ( $pointcut->joinpoint->getClass() == $class ) {
+
             $aspectByClass->pointcuts[] = $pointcut;
           }
         }
+
       } else {
+
         if ( $aspect->pointcuts->joinpoint->getClass() == $class ) {
+
           $aspectByClass->pointcuts = $aspect->pointcuts;
         }
       }
+
       if ( isset( $aspectByClass->pointcuts ) ) {
+
         $aspectByClass->pointcuts = AspectOUtils::FindUniqueArray( $aspectByClass->pointcuts );
       }
-    } // Advices
+    }
+
+    // Advices
     if ( isset( $aspect->advices ) ) {
+
       if ( is_array( $aspect->advices ) ) {
+
         for ( $i = 0; $i < count( $aspect->advices ); $i++ ) {
+
           if ( is_array( $aspect->advices[$i]->pointcut ) ) {
+
             for ( $i_p = 0; $i_p < count( $aspect->advices[$i]->pointcut ); $i_p++ ) {
+
               if ( $advice_by_class = self::getAdvicesByClass( $aspect->advices[$i]->pointcut[$i_p],
-                                        $aspectByClass->pointcuts,
-                                        $aspect->advices[$i] ) ) {
+                                                               $aspectByClass->pointcuts,
+                                                               $aspect->advices[$i] ) ) {
+
                 $aspectByClass->advices[] = $advice_by_class;
               }
             }
+
           } else {
+
             if ( $advice_by_class = self::getAdvicesByClass( $aspect->advices[$i]->pointcut,
-                                      $aspectByClass->pointcuts,
-                                      $aspect->advices[$i] ) ) {
+                                                             $aspectByClass->pointcuts,
+                                                             $aspect->advices[$i] ) ) {
+
               $aspectByClass->advices[] = $advice_by_class;
             }
           }
         }
+
       } else {
+
         if ( $advice_by_class = self::getAdvicesByClass( $aspect->advices->pointcut,
-                                  $aspectByClass->pointcuts,
-                                  $aspect->advices ) ) {
+                                                         $aspectByClass->pointcuts,
+                                                         $aspect->advices ) ) {
+
           $aspectByClass->advices = $advice_by_class;
         }
       }
+
       if ( isset( $aspectByClass->advices ) ) {
+
         $aspectByClass->advices = AspectOUtils::FindUniqueArray( $aspectByClass->advices );
       }
     }
+
     return $aspectByClass;
   }
+
   /**
    * Weaves intertypes and calls WeaveMethods to weave pointcuts with advices
    *
