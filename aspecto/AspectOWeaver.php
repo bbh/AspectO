@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Weaves Aspects with Classes
  *
@@ -45,6 +45,7 @@ class AspectOWeaver
         $aspectByClass->name = $aspect->getName();
         // Intertypes
         if ( isset( $aspect->intertypes ) && $aspect->intertypes ) {
+            $aspectByClass->intertypes = new Intertype;
             // Properties
             if ( isset( $aspect->intertypes->properties ) && $aspect->intertypes->properties ) {
                 $aspectByClass->intertypes->properties = self::getObjectByClass( $aspect->intertypes->properties,
@@ -185,8 +186,6 @@ class AspectOWeaver
     {
         if ( is_array( $method ) ) {
 
-            //foreach ( $methods as $method ) {
-
               if ( isset( $method['advice_type'] ) && !is_null( $method['advice_type'] ) ) {
 
                 switch ( $method['advice_type'] ) {
@@ -270,7 +269,6 @@ class AspectOWeaver
                         break;
                 }
               }
-            //}
         } else {
             return false;
         }

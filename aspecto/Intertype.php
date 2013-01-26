@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Provides an Intertype object
  * 

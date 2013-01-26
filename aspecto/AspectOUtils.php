@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Provides static methods to use across the application.
  *

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Provides magic methods to set and get properties from a class
  * 

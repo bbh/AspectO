@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Provides a Joinpoint object
  * 

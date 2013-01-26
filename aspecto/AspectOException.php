@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Extends Exception and provides a customized message
  *

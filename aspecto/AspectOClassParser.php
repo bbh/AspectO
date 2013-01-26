@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Provides methods to parse, set, get and check the content of a class
  *
@@ -234,7 +234,9 @@ class AspectOClassParser extends Overload {
           $code = ''.PHP_EOL;
           for ( $i = $lines[1]; $i < $lines[2]-1; ++$i ) {
 
-            $code .= $content_array[$i].PHP_EOL;
+            if ( isset( $content_array[$i] ) ) {
+              $code .= $content_array[$i].PHP_EOL;
+            }
           }
 
           $meth->setCode( $code );
@@ -344,7 +346,7 @@ class AspectOClassParser extends Overload {
    * @return String
    */
   public function getString () {
-    $response = "<?\nclass $this->name";
+    $response = "<?php\nclass $this->name";
     if ( isset( $this->inheritance ) ) {
       $response .= self::getStringInheritanceExtends( $this->inheritance );
       $response .= self::getStringInheritanceImplements( $this->inheritance );

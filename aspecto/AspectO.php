@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Parses, validates and weaves aspects and classes
  *

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Provides properties to set and get paths of aspects, source and weaved classes
  * 

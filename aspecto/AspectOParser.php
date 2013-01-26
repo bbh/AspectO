@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Reads and parses an aspect file and returns an well formed Aspect object
  *
@@ -40,7 +40,7 @@ class AspectOParser extends Overload
      */
     protected function Parse ( $aspectFile ) {
         $aspectFile = AspectOUtils::RemoveComments( $aspectFile );
-        if ( preg_match( '/\<\?\s*aspect\s*(\w*)\s*\{(.*)\}(?=\s*\?\>\Z)/xsU', $aspectFile,
+        if ( preg_match( '/\<\?[ph]{0,3}\s*aspect\s*(\w*)\s*\{(.*)\}(?=\s*\?\>\Z)/xsU', $aspectFile,
                          $aspect_array ) ) {
             $aspect = new Aspect();
             $aspect->setName( $aspect_array[1] );

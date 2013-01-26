@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Validates and Aspect object against a ReflectionClass
  *
