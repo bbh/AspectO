@@ -5,7 +5,6 @@
  * @author Basilio Brice&ntilde;o H. <bbh@briceno.mx>
  * @copyright Copyright &copy; 2006 Basilio Brice&ntilde;o Hern&acute;ndez.
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
-
  */
 class AspectOConfig extends Overload {
 
