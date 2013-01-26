@@ -1,7 +1,7 @@
 <?php
 aspect AspectMyLog
 {
-    public A*ions $myNewVar = 'something';
+  public A*ions $myNewVar = 'something';
 	
 	public Actio*::$myNewVar2 = 'something2';
 	
@@ -19,38 +19,38 @@ aspect AspectMyLog
 	
 	declare parent : Account extends Actions;
 	
-    pointcut setLogObject : new ( Acti*s (*) );
+  pointcut setLogObject : new ( Acti*s (*) );
 
-    pointcut logTransfer : execution ( * Actions transfer (*) );
-    
-    pointcut callTransfer : call ( Ac*ount * (*) );
-    
-    pointcut aroundExecPointcut : execution ( protected Actions someMethod (*) );
-    
-    pointcut arountCallPointcut : call ( Actions someMethod (*) );
-
-    before setLogObject
-    {
-        $this->logger = new MyLogClass();
-    }
-
-    after logTransfer || callTransfer
-    {
-        $this->logger->log( $fromAccount, $toAccount, $amount );
-    }
+  pointcut logTransfer : execution ( * Actions transfer (*) );
   
-    around aroundExecPointcut
-    {
-        echo 'arounding, before';
-        proceed();
-        echo 'arounding, after';
-    }
-    
-    around arountCallPointcut
-    {
-        echo 'arounding, before';
-        proceed();
-        echo 'arounding, after';
-    }
+  pointcut callTransfer : call ( Ac*ount * (*) );
+  
+  pointcut aroundExecPointcut : execution ( protected Actions someMethod (*) );
+  
+  pointcut arountCallPointcut : call ( Actions someMethod (*) );
+
+  before setLogObject
+  {
+    $this->logger = new MyLogClass();
+  }
+
+  after logTransfer || callTransfer
+  {
+    $this->logger->log( $fromAccount, $toAccount, $amount );
+  }
+  
+  around aroundExecPointcut
+  {
+    echo 'arounding, before';
+    proceed();
+    echo 'arounding, after';
+  }
+  
+  around arountCallPointcut
+  {
+    echo 'arounding, before';
+    proceed();
+    echo 'arounding, after';
+  }
 }
 ?>

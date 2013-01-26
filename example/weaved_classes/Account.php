@@ -1,53 +1,15 @@
-<?
+<?php
 class Account extends Actions implements InterfaceTest
 {
-public $myNewsVar = 'somethings';
-public $toEveryClass = 'my value';
 
-public function getAccount (  $someAccount  )
-{
-
-$this->getAccount_CALL( $someAccount );
-
-        $this->logger->log( $fromAccount, $toAccount, $amount );
-    
-}
-
-public function getBalance (  )
-{
-
-$this->getBalance_CALL();
-
-        $this->logger->log( $fromAccount, $toAccount, $amount );
-    
-}
-
-public function withdraw (  $amount  )
-{
-
-$this->withdraw_CALL( $amount );
-
-        $this->logger->log( $fromAccount, $toAccount, $amount );
-    
-}
-
-public function deposit (  $amount  )
-{
-
-$this->deposit_CALL( $amount );
-
-        $this->logger->log( $fromAccount, $toAccount, $amount );
-    
-}
-
-public function getAccount_CALL (  $someAccount  )
+public function getAccount ( $someAccount )
 {
 
 		return $someAccount;
 	
 }
 
-public function getBalance_CALL (  )
+public function getBalance (  )
 {
 
 		$someBalance = 500;
@@ -55,19 +17,19 @@ public function getBalance_CALL (  )
 	
 }
 
-public function withdraw_CALL (  $amount  )
+public function withdraw ( $amount )
 {
 
 	    echo 'withdraw';
-		
+		// .. some real code ..
 	
 }
 
-public function deposit_CALL (  $amount  )
+public function deposit ( $amount )
 {
 
 	    echo 'deposit';
-		
+		// .. some real code ..
 	
 }
 

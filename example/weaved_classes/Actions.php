@@ -1,16 +1,11 @@
-<?
+<?php
 class Actions extends Account implements InterfaceTest
 {
-public $something =  'foo';
 /**
      * Foo var
      *
      * @var sometype
      */
-private $foo;
-public $myNewVar = 'something';
-public $myNewVar2 = 'something2';
-public $toEveryClass = 'my value';
 
 public function __construct (  )
 {
@@ -27,7 +22,7 @@ public function __construct (  )
      * @param Account $toAccount
      * @param int $amount
      */
-private function transfer (  Account $fromAccount, Account $toAccount, $amount  )
+private function transfer ( $fromAccount, $toAccount, $amount )
 {
 
         if ( $fromAccount->getBalance() < amount ) {
@@ -37,8 +32,6 @@ private function transfer (  Account $fromAccount, Account $toAccount, $amount  
         $fromAccount->withdraw( $amount );
 
         $toAccount->deposit( $amount );
-    
-        $this->logger->log( $fromAccount, $toAccount, $amount );
     
 }
 
