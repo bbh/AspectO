@@ -1,4 +1,4 @@
-<?
+<?php
 aspect AspectMyLog
 {
     public A*ions $myNewVar = 'something';
