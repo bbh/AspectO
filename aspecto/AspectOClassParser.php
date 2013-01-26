@@ -2,22 +2,25 @@
 /**
  * Provides methods to parse, set, get and check the content of a class
  *
- * @author Basilio Brice&ntilde;o H. <bbh@tampico.org.mx>
+ * @author Basilio Brice&ntilde;o H. <bbh@briceno.mx>
  * @copyright Copyright &copy; 2007 Basilio Brice&ntilde;o Hern&aacute;ndez.
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version 0.1.35
  * @todo add Constants support
  * @todo check if class is abstract
  */
 class AspectOClassParser extends Overload {
+
   protected $name;
   public $inheritance;
   public $constants;
   public $properties;
   public $methods;
-  public function __construct ( $class ) {
+
+  public function __construct ( $class )
+  {
     $this->ParseContent( new ReflectionClass( $class ) );
   }
+
   /**
    * Parses the content of a class in current properties
    *
@@ -25,7 +28,9 @@ class AspectOClassParser extends Overload {
    */
   final protected function ParseContent ( ReflectionClass $class )
   {
-    $content = AspectOUtils::RemoveComments( file_get_contents( $class->getFileName() ) );
+    $file_content = file_get_contents( $class->getFileName() );
+
+    $content = AspectOUtils::RemoveComments( $file_content );
 
     $this->setName( $class->getName() );
 
@@ -159,6 +164,7 @@ class AspectOClassParser extends Overload {
 
         // parse parameters
         $rx = '/.*\-\sParameters\s\[([\d])\]\s\{.*/';
+
         if ( preg_match( $rx, $method->__toString(), $result ) ) {
 
           $num_params = $result[1];
@@ -187,10 +193,12 @@ class AspectOClassParser extends Overload {
               if ( preg_match( '/.*\=\sArray.*/', $param->__toString() ) ) {
 
                 $rx2 = '/.*function\s*'.$method->getName().'\s*\((.*)\)\s*\{.*/';
+
                 if ( preg_match( $rx2, $content, $_arg_all ) ) {
 
                   $rx3 = '/.*\$'.$param->getName().
                          '\s*\=\s*([a|A]rray\s*\(.*\))\s*\,?\$?.*/';
+
                   if ( preg_match( $rx3, $_arg_all[1], $_arg_one ) ) {
 
                     $arg .= ' = ' . $_arg_one[1];
@@ -204,6 +212,7 @@ class AspectOClassParser extends Overload {
 
                 $rx2 = '/Parameter\s#0\s\[\s\<optional\>\s\$'.$param->getName().
                        '\s\=\s(\'?.*\'?)\s\]/';
+
                 if ( preg_match( $rx2, $param->__toString(), $_arg_val ) ) {
 
                   $arg .= ' = ' . $_arg_val[1];
@@ -213,30 +222,36 @@ class AspectOClassParser extends Overload {
             }
 
             $args[] = $arg;
+
             unset( $arg );
           }
         }
+
         unset( $rx );
 
         // set parameters
         if ( isset ( $args ) && $args ) {
+
           $meth->setArguments( is_array($args) ? implode(', ',$args) : $args );
+
           unset( $args );
         }
 
         // parse lines of code (start,end)
         $rx = '/\@\@\s.*\.php\s([\d]*)\s\-\s([\d]*)/';
+
         if ( preg_match( $rx, $method->__toString(), $lines ) ) {
 
           $content_array = preg_split( '/\n/', $content );
 
           // set code
           $code = ''.PHP_EOL;
+
           for ( $i = $lines[1]; $i < $lines[2]-1; ++$i ) {
 
-            if ( isset( $content_array[$i] ) ) {
+            //if ( isset( $content_array[$i] ) ) {
               $code .= $content_array[$i].PHP_EOL;
-            }
+            //}
           }
 
           $meth->setCode( $code );
@@ -250,6 +265,7 @@ class AspectOClassParser extends Overload {
 
         // set methods array
         $methods[] = $meth;
+
         unset( $meth );
       }
     }
@@ -262,39 +278,55 @@ class AspectOClassParser extends Overload {
    *
    * @param Property $property
    */
-  public function addProperty ( Property $property ) {
+  public function addProperty ( Property $property )
+  {
     if ( isset( $this->properties ) && $this->properties ) {
+
       if ( is_array( $this->properties ) ) {
+
         $this->properties[count($this->properties)] = $property;
+
       } else {
+
         $temporal_propertiy = $this->properties;
         $this->properties = null;
         $this->properties[0] = $temporal_propertiy;
         $this->addProperty( $property );
       }
+
     } else {
+
       $this->setProperties( $property );
     }
   }
+
   /**
    * Adds a Inheritance object to the current properties
    *
    * @param Inheritance $inheritance
    */
-  public function addInheritance ( Inheritance $inheritance ) {
+  public function addInheritance ( Inheritance $inheritance )
+  {
     if ( isset( $this->inheritance ) && $this->inheritance ) {
+
       if ( is_array( $this->inheritance ) ) {
+
         $this->inheritance[count($this->inheritance)] = $inheritance;
+
       } else {
+
         $temporal_inheritance = $this->inheritance;
         $this->inheritance = null;
         $this->inheritance[0] = $temporal_inheritance;
         $this->addInheritance( $inheritance );
       }
+
     } else {
+
       $this->inheritance = $inheritance;
     }
   }
+
   public function addMethod ( Method $method )
   {
     if ( isset( $this->methods ) && $this->methods ) {
@@ -306,20 +338,30 @@ class AspectOClassParser extends Overload {
       $this->setMethods( $method );
     }
   }
-  public function MethodExists ( $method_name ) {
+
+  public function MethodExists ( $method_name )
+  {
     if ( is_array( $this->methods ) ) {
+
       foreach ( $this->methods as $method ) {
+
         if ( $method_name == $method->name ) {
+
           return true;
         }
       }
+
     } else {
+
       if ( $method_name = $this->methods ) {
+
         return true;
       }
     }
+
     return false;
   }
+
   /**
    * Sets code into a Method
    *
@@ -329,72 +371,103 @@ class AspectOClassParser extends Overload {
   public function setMethodCode ( $method_name, $code )
   {
     if ( is_array( $this->methods ) ) {
+
       for ( $i = 0; $i < count( $this->methods ); $i++ ) {
+
         if ( $this->methods[$i]->name === $method_name ) {
+
           $this->methods[$i]->code = $code;
         }
       }
+
     } else {
+
       if ( $this->methods->name === $method_name ) {
+
         $this->methods->code = $code;
       }
     }
   }
+
   /**
    * Returns the current object into a fixed string
    *
    * @return String
    */
-  public function getString () {
+  public function getString ()
+  {
     $response = "<?php\nclass $this->name";
+
     if ( isset( $this->inheritance ) ) {
+
       $response .= self::getStringInheritanceExtends( $this->inheritance );
       $response .= self::getStringInheritanceImplements( $this->inheritance );
     }
+
     $response .= "\n{\n";
     $response .= self::getStringProperties( $this->properties );
     $response .= self::getStringMethods( $this->methods );
     $response .= "\n}";
+
     return $response;
   }
+
   /**
    * Returns a fixed string extending abstract classes
    *
    * @param Mixed $inheritance
    * @return String
    */
-  final protected static function getStringInheritanceExtends ( $inheritance ) {
+  final protected static function getStringInheritanceExtends ( $inheritance )
+  {
     $response = '';
+
     if ( is_array( $inheritance ) ) {
+
       foreach ( $inheritance as $inh ) {
+
         $response .= self::getStringInheritanceExtends( $inh );
       }
+
     } else {
+
       if ( $inheritance->action === 'extends' ) {
-        $response .= ' extends '.$inheritance->parent;
+
+        $response .= ' extends ' . $inheritance->parent;
       }
     }
+
     return $response;
   }
+
   /**
    * Returns a fixed string implementing some interfase
    *
    * @param Mixed $inheritance
    * @return String
    */
-  final protected static function getStringInheritanceImplements ( $inheritance ) {
+  final protected static function getStringInheritanceImplements ( $inheritance )
+  {
     $response = '';
+
     if ( is_array( $inheritance ) ) {
+
       foreach ( $inheritance as $inh ) {
+
         $response .= self::getStringInheritanceImplements( $inh );
       }
+
     } else {
+
       if ( $inheritance->action === 'implements' ) {
+
         $response .= ' implements '.$inheritance->parent;
       }
     }
+
     return $response;
   }
+
   /**
    * Returns a fixed string declaring constants
    *
@@ -402,71 +475,108 @@ class AspectOClassParser extends Overload {
    * @return String
    * @todo NOT WORKING YET
    */
-  final protected static function getStringConstants ( $constants ) {
+  final protected static function getStringConstants ( $constants )
+  {
     return $constants;
   }
+
   /**
    * Returns a fixed string declaring properties
    *
    * @param Mixed $properties
    * @return String
    */
-  final protected static function getStringProperties ( $properties ) {
+  final protected static function getStringProperties ( $properties )
+  {
     $response = '';
+
     if ( is_array( $properties ) ) {
+
       foreach ( $properties as $property ) {
+
         $response .= self::getStringProperties( $property );
       }
+
     } else {
-      if ( isset( $properties->doc_comment ) && count_chars( $properties->doc_comment ) > 1 ) {
+
+      if ( isset( $properties->doc_comment ) &&
+           count_chars( $properties->doc_comment ) > 1 ) {
+
         $response .= $properties->doc_comment . "\n";
       }
+
       if ( isset( $properties->static ) && $properties->static ) {
         $response .= 'static ';
       }
+
       if ( isset( $properties->name ) && !$properties->name ) {
+
         $response .= $properties->visibility . ' $' . $properties->name;
+
         if ( isset( $properties->value ) &&
-           count_chars( $properties->value ) >= 1 && $properties != ' ' ) {
+             count_chars( $properties->value ) >= 1 && $properties != ' ' ) {
+
           $response .= ' = '.$properties->value;
         }
+
         $response .= ";\n";
       }
     }
+
     return $response;
   }
+
   /**
    * Returns a fixed string with the content of the methods
    *
    * @param Mixed $methods
    * @return String
    */
-  final protected static function getStringMethods ( $methods ) {
+  final protected static function getStringMethods ( $methods )
+  {
     $response = '';
+
     if ( is_array( $methods ) ) {
+
       foreach ( $methods as $method ) {
+
         $response .= self::getStringMethods( $method );
       }
+
     } else {
-      if ( isset( $methods->doc_comment ) && count_chars( $methods->doc_comment ) > 1 ) {
+
+      if ( isset( $methods->doc_comment ) &&
+           count_chars( $methods->doc_comment ) > 1 ) {
+
         $response .= $methods->doc_comment . "\n";
       }
+
       if ( isset( $methods->visibility ) ) {
+
         $response .= $methods->visibility . ' ';
       }
+
       if ( isset( $methods->final ) && $methods->final ) {
+
         $response .= 'final ';
       }
+
       if ( isset( $methods->static ) && $methods->static ) {
+
         $response .= 'static ';
       }
+
       $response .= 'function ' . $methods->name . ' ( ';
-      if ( isset( $methods->arguments ) && count_chars( $methods->arguments ) > 1 ) {
+
+      if ( isset( $methods->arguments ) &&
+           count_chars( $methods->arguments ) > 1 ) {
+
         $response .= $methods->arguments;
       }
+
       $response .= " )\n{\n" . $methods->code . "\n}\n";
     }
+
     return $response;
   }
 }
-?>
