@@ -40,13 +40,13 @@ class AspectOParser extends Overload
      */
     protected function Parse ( $aspectFile ) {
         $aspectFile = AspectOUtils::RemoveComments( $aspectFile );
-        if ( preg_match( '/\<\?[ph]{0,3}\s*aspect\s*(\w*)\s*\{(.*)\}(?=\s*\?\>\Z)/xsU', $aspectFile,
+        if ( preg_match( '/\<\?(php)?\s*aspect\s*(\w*)\s*\{(.*)\}(?=\s*\?\>\Z)/xsU', $aspectFile,
                          $aspect_array ) ) {
             $aspect = new Aspect();
-            $aspect->setName( $aspect_array[1] );
-            $aspect->setIntertypes( self::ParseIntertypes( $aspect_array[2] ) );
-            $aspect->setPointcuts( self::ParsePointCuts( $aspect_array[2] ) );
-            $aspect->setAdvices( self::ParseAdvices( $aspect_array[2] ) );
+            $aspect->setName( $aspect_array[2] );
+            $aspect->setIntertypes( self::ParseIntertypes( $aspect_array[3] ) );
+            $aspect->setPointcuts( self::ParsePointCuts( $aspect_array[3] ) );
+            $aspect->setAdvices( self::ParseAdvices( $aspect_array[3] ) );
             // unset empty properties
             if ( !$aspect->intertypes ) { unset( $aspect->intertypes ); }
             if ( !$aspect->pointcuts ) { unset( $aspect->pointcuts ); }
