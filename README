@@ -1,0 +1,48 @@
+                              AspectO
+                            Version 0.3
+
+Copyright (C) 2006 Basilio Briceno Hernandez <bbh@briceno.mx>
+
+These are the release notes for FacturaElectronica version 0.2.
+Read them carefully, as they tell you what this is all about,
+and what to do if something goes wrong.
+
+WHAT IS AspectO?
+
+  AspectO is a free (LGPL) set of classes written in PHP to bring support to
+  AOP. This classes provides a very simple and easy to learn syntax, doesn't
+  requires binary extensions additional to a common PHP installation, obtains
+  the content from classes using PCRE and the PHP's Object Reflection, and
+  finally weaves your Aspects preprocessing the source code.
+
+  It is distributed under the GNU Lesser General Public License - see the
+  accompanying COPYING file for more details.
+
+ON WHAT IT RUNS?
+
+  You can run this on any hardware that runs PHP 5.2.x or higher.
+
+REQUIREMENTS
+
+  It requires the PHP binary extension PCRE that is included by default in PHP.
+
+DOCUMENTATION:
+
+  AspectO uses three basic directories, one for your Aspects files, another for
+  your classes and a final one for the weaved classes. The way it works is
+  setting the paths of your directories as properties of the AspectOConf object,
+  the AspectO object receives the AspecOConf object and calls the AspectOParser
+  and the AspectoClassParser to compare your Aspects versus your Classes,
+  checks if they are compatible and finally return them as fixed objects to the
+  AspectOWeaver, it weaves both objects (classes and aspects) and returns weaved
+  classes in the weaved classes directory.
+
+  The syntax of an Aspect in AspectO is very simple and consists of joinpoints,
+  pointcuts and advices. AspectO provides three types of joinpoints: execution,
+  call and construction; and three types of advices: after, before and around.
+
+  - You can see an example at http://briceno.mx/2008/09/the-aspecto-project/
+
+IF SOMETHING GOES WRONG:
+
+  Contact the author at bbh@briceno.mx or throw his twitter accout @bbhx
