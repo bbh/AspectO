@@ -28,9 +28,8 @@ class AspectOClassParser extends Overload {
    */
   final protected function ParseContent ( ReflectionClass $class )
   {
-    $file_content = file_get_contents( $class->getFileName() );
-
-    $content = AspectOUtils::RemoveComments( $file_content );
+    $content = file_get_contents( $class->getFileName() );
+    //$content = AspectOUtils::RemoveComments( $content );
 
     $this->setName( $class->getName() );
 
@@ -245,17 +244,40 @@ class AspectOClassParser extends Overload {
           $content_array = preg_split( '/\n/', $content );
 
           // set code
-          $code = ''.PHP_EOL;
+          $code = '' . PHP_EOL;
 
-          for ( $i = $lines[1]; $i < $lines[2]-1; ++$i ) {
+          // set code by line
+          for ( $j = 0; $j < $lines[2]; $j++ ) {
 
-            //if ( isset( $content_array[$i] ) ) {
-              $code .= $content_array[$i].PHP_EOL;
-            //}
+            if ( isset( $content_array[$j] ) ) {
+
+              if ( $j >= $lines[1] ) {
+
+                if ( stristr( $content_array[$j], 'function' ) ) {
+                  $j++;
+                }
+
+                $code .= $content_array[$j].PHP_EOL;
+              }
+            }
           }
 
-          $meth->setCode( $code );
+          if ( isset( $code ) ) {
+
+            // try to remove initial { and last }
+            $rx_code = '/^[\n\s\t]*\{'.
+                       '([\n\s\t]*[\d\w\s\n\t'.
+                       '\!\'\";.,_\-\(\)\/\*\+\&\<\>\=\$\{\}\[\]]*)'.
+                       '\}\n/';
+
+            $code = preg_replace( $rx_code, '$1', $code );
+
+            $meth->setCode( $code );
+
+            unset( $code );
+          }
         }
+
         unset( $rx );
 
         // set docComment
