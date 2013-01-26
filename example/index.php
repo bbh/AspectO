@@ -1,4 +1,4 @@
-<?
+<?php
 function __autoload ( $class )
 {   $paths = array( 'classes/', '../aspecto/' );
     foreach ( $paths as $path )
