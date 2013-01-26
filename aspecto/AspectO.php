@@ -6,7 +6,7 @@
  * $aspecto = new AspectO( $AspectOConfig );
  * </code>
  *
- * @author Basilio Brice&ntilde;o H. <bbh@tampico.org.mx>
+ * @author Basilio Brice&ntilde;o H. <bbh@briceno.mx>
  * @copyright Copyright &copy; 2006 Basilio Brice&ntilde;o Hern&aacute;ndez.
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @todo aspect->class/method weaving
@@ -17,7 +17,9 @@ class AspectO extends Overload {
   {
     if ( $config->getMode() ) {
 
-      $this->WeaveAspects( $config, $this->ValidateAspects( $this->ParseAspects( $config ) ) );
+      $parsed_aspects = $this->ParseAspects( $config );
+
+      $this->WeaveAspects( $config, $this->ValidateAspects( $parsed_aspects ) );
     }
   }
 
@@ -45,8 +47,6 @@ class AspectO extends Overload {
         $aspects = $aspect;
       }
     }
-
-    var_dump( $aspects ); exit;
 
     return $aspects;
   }
