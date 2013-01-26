@@ -1,4 +1,4 @@
-<?
+<?php
 class Account
 {
 	public function getAccount ( $someAccount )

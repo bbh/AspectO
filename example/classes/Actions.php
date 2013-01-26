@@ -1,4 +1,4 @@
-<?
+<?php
 class Actions
 {
     const HOLA = 'MUNDO';
