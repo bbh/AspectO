@@ -41,38 +41,38 @@ class AspectOWeaver {
    */
   final private static function getAspectByClass ( Aspect $aspect, $class )
   {
-    $aspectByClass = new Aspect();
+    $_aspect = new Aspect();
 
-    $aspectByClass->name = $aspect->getName();
+    $_aspect->name = $aspect->getName();
 
     // Intertypes
     if ( isset( $aspect->intertypes ) && $aspect->intertypes ) {
 
-      //$aspectByClass->intertypes = new Intertype;
+      //$_aspect->intertypes = new Intertype;
 
       // Properties
       if ( isset( $aspect->intertypes->properties ) &&
            $aspect->intertypes->properties ) {
 
-        $aspectByClass->intertypes->properties = self::getObjectByClass( $aspect->intertypes->properties,
-                                                                         $class,
-                                                                         'properties' );
+        $_aspect->intertypes->properties = self::getObjectByClass( $aspect->intertypes->properties,
+                                                                   $class,
+                                                                   'properties' );
       }
 
       // Methods
       if ( isset( $aspect->intertypes->methods ) ) {
 
-        $aspectByClass->intertypes->methods = self::getObjectByClass( $aspect->intertypes->methods,
-                                                                      $class,
-                                                                      'methods' );
+        $_aspect->intertypes->methods = self::getObjectByClass( $aspect->intertypes->methods,
+                                                                $class,
+                                                                'methods' );
       }
 
       // Inheritance
       if ( isset( $aspect->intertypes->inheritance ) ) {
 
-        $aspectByClass->intertypes->inheritance = self::getObjectByClass( $aspect->intertypes->inheritance,
-                                                                          $class,
-                                                                          'inheritance' );
+        $_aspect->intertypes->inheritance = self::getObjectByClass( $aspect->intertypes->inheritance,
+                                                                    $class,
+                                                                    'inheritance' );
       }
     }
 
@@ -85,7 +85,7 @@ class AspectOWeaver {
 
           if ( $pointcut->joinpoint->getClass() == $class ) {
 
-            $aspectByClass->pointcuts[] = $pointcut;
+            $_aspect->pointcuts[] = $pointcut;
           }
         }
 
@@ -93,13 +93,13 @@ class AspectOWeaver {
 
         if ( $aspect->pointcuts->joinpoint->getClass() == $class ) {
 
-          $aspectByClass->pointcuts = $aspect->pointcuts;
+          $_aspect->pointcuts = $aspect->pointcuts;
         }
       }
 
-      if ( isset( $aspectByClass->pointcuts ) ) {
+      if ( isset( $_aspect->pointcuts ) ) {
 
-        $aspectByClass->pointcuts = AspectOUtils::FindUniqueArray( $aspectByClass->pointcuts );
+        $_aspect->pointcuts = AspectOUtils::FindUniqueArray( $_aspect->pointcuts );
       }
     }
 
@@ -115,20 +115,20 @@ class AspectOWeaver {
             for ( $i_p = 0; $i_p < count( $aspect->advices[$i]->pointcut ); $i_p++ ) {
 
               if ( $advice_by_class = self::getAdvicesByClass( $aspect->advices[$i]->pointcut[$i_p],
-                                                               $aspectByClass->pointcuts,
+                                                               $_aspect->pointcuts,
                                                                $aspect->advices[$i] ) ) {
 
-                $aspectByClass->advices[] = $advice_by_class;
+                $_aspect->advices[] = $advice_by_class;
               }
             }
 
           } else {
 
             if ( $advice_by_class = self::getAdvicesByClass( $aspect->advices[$i]->pointcut,
-                                                             $aspectByClass->pointcuts,
+                                                             $_aspect->pointcuts,
                                                              $aspect->advices[$i] ) ) {
 
-              $aspectByClass->advices[] = $advice_by_class;
+              $_aspect->advices[] = $advice_by_class;
             }
           }
         }
@@ -136,20 +136,20 @@ class AspectOWeaver {
       } else {
 
         if ( $advice_by_class = self::getAdvicesByClass( $aspect->advices->pointcut,
-                                                         $aspectByClass->pointcuts,
+                                                         $_aspect->pointcuts,
                                                          $aspect->advices ) ) {
 
-          $aspectByClass->advices = $advice_by_class;
+          $_aspect->advices = $advice_by_class;
         }
       }
 
-      if ( isset( $aspectByClass->advices ) ) {
+      if ( isset( $_aspect->advices ) ) {
 
-        $aspectByClass->advices = AspectOUtils::FindUniqueArray( $aspectByClass->advices );
+        $_aspect->advices = AspectOUtils::FindUniqueArray( $_aspect->advices );
       }
     }
 
-    return $aspectByClass;
+    return $_aspect;
   }
 
   /**
